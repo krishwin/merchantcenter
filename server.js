@@ -30,8 +30,8 @@ app.prepare().then(() => {
       async afterAuth(ctx) {
 		const { shop, accessToken,accessTokenData } = ctx.session;
 		let storeid = -1;
-	console.log(accessTokenData);
-	      if(accessTokenData.associated_user)
+	console.log(accessToken);
+	      if(accessToken.associated_user)
 		{
 			const response =  await fetch(
         'https://irad6avdaqvzwto-subscriberdb.adb.us-phoenix-1.oraclecloudapps.com/ords/admin/restsub/parties/?p_cust_email='+accessTokenData.associated_user.email+'&p_cust_store='+shop,
