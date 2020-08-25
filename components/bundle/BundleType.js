@@ -85,7 +85,7 @@ const BundleType = ({ formData, setForm,navigation }) => {
         {label: 'Box/pack', value: 'pack', renderChildren,},
         {label: 'Single Item', value: 'single',renderChildren},
         
-        ]} onChange={configChange} helpText="Select Program Configuration" />
+        ]} onChange={configChange} helpText="Select Program Configuration" disabled/>
       </Card.Section>
      
     

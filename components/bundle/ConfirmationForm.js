@@ -7,7 +7,7 @@ import {
   } from '@shopify/polaris';
   import moment from 'moment';
 const ConfirmationForm = ({ formData,setForm,navigation }) => {
-const {PROGRAM_NAME,
+const {PROGRAM_ID,PROGRAM_NAME,
                 PROGRAM_DESCRIPTION,
                 BOM_ITEM_NO,
                 NO_OF_CANCEL_RET,
@@ -22,7 +22,8 @@ const {PROGRAM_NAME,
                 PROGRAM_TYPE,
                 PROGRAM_PRICING_TYPE,
                 PROGRAM_PRICING_RATE,
-              PRODUCTS} = formData;
+              PRODUCTS,
+              STATUS} = formData;
  const { previous,next, go } = navigation;
  return(
     <div>
@@ -51,9 +52,11 @@ const {PROGRAM_NAME,
          <div style={{float:"left"}}>
           <Button primary size="large" onClick={previous} >Back</Button>
         </div>
+        {PROGRAM_ID > -1 && STATUS == 'DRAFT'?
         <div style={{float:"right"}}>
           <Button primary size="large" onClick={next} >Submit</Button>
         </div>
+        : ''}
    </div>
  );
 };

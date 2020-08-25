@@ -13,7 +13,7 @@ const BundleName = ({ formData, setForm,navigation }) => {
  return (
      <div>
          <Card title="Program Details" sectioned>
-               <TextField  value={PROGRAM_NAME} id="PROGRAM_NAME" onChange={setForm} helpText="Enter a unique Name for the Bundle." />
+               <TextField  value={PROGRAM_NAME} id="PROGRAM_NAME" onChange={setForm} helpText="Enter a unique Name for the Bundle." required/>
               
               <TextField  value={PROGRAM_DESCRIPTION} id="PROGRAM_DESCRIPTION" onChange={setForm} helpText="Enter a detailed description for the Bundle." />
               

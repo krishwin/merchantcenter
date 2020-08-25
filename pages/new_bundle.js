@@ -3,7 +3,7 @@ import {Bundlewizard} from  '../components/bundle';
 import { useRouter } from 'next/router';
 import {Spinner} from '@shopify/polaris';
 import  {  cloneDeepLimited } from '../common/utils';
-
+import {AUTHTOKEN,SHOPORIGIN ,SHOPID} from '../common/constants';
 const defaultData = {
   PROGRAM_ID:'-1',
   PROGRAM_NAME:'',
@@ -18,7 +18,7 @@ const defaultData = {
   REPEAT_OPTION:'Monthly',
   CUST_ACCOUNT_ID:'',
   BOM_ITEM_DESC:'',
-  BOM_TYPE:'',
+  BOM_TYPE:'pack',
   PROGRAM_TYPE:'Shippable',
   PROGRAM_PRICING_TYPE:'NO',
   PROGRAM_PRICING_RATE:'0',
@@ -32,8 +32,11 @@ const defaultData = {
   }],
   IMAGES:[],
   STATUS:'DRAFT',
-  CUST_ACCOUNT_ID:'1',
-  REVISION_NUMBER:'0'
+  CUST_ACCOUNT_ID: SHOPID,
+  REVISION_NUMBER:'0',
+  PRICE_RULE_ID:'',
+  DISCOUNT_ID:'',
+  DISCOUNT_CODE:'',
   
 };
 const new_bundle = () =>
@@ -49,11 +52,12 @@ const new_bundle = () =>
           useEffect(() => {
             const fetchData = async () => {
         const result = await fetch(
-        'https://irad6avdaqvzwto-subscriberdb.adb.us-phoenix-1.oraclecloudapps.com/ords/admin/restsub/manage/bundle/'+ id+'/'+rev,
+        'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundle/'+ id+'/'+rev,
         {
           method: 'GET',
         headers: {
-            'Content-Type' : 'application/json'
+            'Content-Type' : 'application/json',
+            'token'     : AUTHTOKEN
           },
         },
 

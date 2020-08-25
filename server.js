@@ -5,15 +5,16 @@ const { default: createShopifyAuth } = require('@shopify/koa-shopify-auth');
 const dotenv = require('dotenv');
 const { verifyRequest } = require('@shopify/koa-shopify-auth');
 const session = require('koa-session');
-
+const jwt =require('jsonwebtoken');
 dotenv.config();
-
+const fs = require('fs');
 const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const { SHOPIFY_API_SECRET_KEY, SHOPIFY_API_KEY } = process.env;
+const  privateKey = fs.readFileSync('keys/rsa.private');
 
 app.prepare().then(() => {
   const server = new Koa();
@@ -24,10 +25,11 @@ app.prepare().then(() => {
     createShopifyAuth({
       apiKey: SHOPIFY_API_KEY,
       secret: SHOPIFY_API_SECRET_KEY,
-	  scopes: ['read_products','read_customers','write_customers','read_orders','read_discounts','write_discounts'],
+	  scopes: ['read_products','read_customers','write_customers','read_orders','read_discounts','write_discounts','read_price_rules','write_price_rules'],
 	  accessMode: 'offline',
       async afterAuth(ctx) {
-        const { shop, accessToken,accessTokenData } = ctx.session;
+		const { shop, accessToken,accessTokenData } = ctx.session;
+		let storeid = -1;
 	console.log(accessTokenData);
 	      if(accessTokenData.associated_user)
 		{
@@ -90,11 +92,13 @@ app.prepare().then(() => {
 			if(merchcontacts.customer && merchcontacts.customer.length > 0 )
 			{
 				console.log('customer exists'+ merchcontacts.customer[0].STORE_ID);
+				storeid= merchcontacts.customer[0].STORE_ID;
 			}
 			else{
 				console.log('creating merchant ');
 				let payload = JSON.parse(JSON.stringify(accessTokenData));
 				payload.store_name = shop;
+				payload.accessToken = accessToken;
 				console.log(JSON.stringify(payload));
 
 				const response =  await fetch(
@@ -114,11 +118,23 @@ app.prepare().then(() => {
 					console.log(await response.json());
 			}
 		}
+		
+		let token =jwt.sign({shop:shop},privateKey, { algorithm: 'RS256' , expiresIn: '1h' ,audience:'subscribenow',issuer: 'subscribenow',keyid : 'master'})
 	      ctx.cookies.set("shopOrigin", shop, {
           					httpOnly: false,
          					 secure: true,
          					 sameSite: 'none'
-       							 });
+									});
+		ctx.cookies.set("token", token, {
+										httpOnly: false,
+										secure: true,
+										sameSite: 'none'
+											  });
+		ctx.cookies.set("shopid", storeid, {
+          					httpOnly: false,
+         					 secure: true,
+         					 sameSite: 'none'
+									});											  
         ctx.redirect('/');
       },
     }),

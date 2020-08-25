@@ -27,6 +27,8 @@ import {
   Banner, Caption, DropZone, List, Thumbnail,Spinner
 } from '@shopify/polaris';
 import moment from 'moment';
+import {AUTHTOKEN,SHOPORIGIN ,SHOPID} from '../../common/constants';
+import translations from '@shopify/polaris/locales/en.json';
 
 const steps = [
   { id: 'BundleName', Component: BundleName },
@@ -71,21 +73,7 @@ const Bundlewizard = ({data,programId}) => {
                     '',
                 },
               }}
-              i18n={{
-                Polaris: {
-                  Frame: {
-                    skipToContent: 'Skip to content',
-                  },
-                  ContextualSaveBar: {
-                    save: 'Save',
-                    discard: 'Discard',
-                  },
-                  DropZone: {
-                      actionTitle: 'Add file',
-                      actionHint: 'or drop files to upload',
-                  },
-                },
-              }}
+              i18n={translations}
             >
     <Frame>
       {revise ? '' :
@@ -95,53 +83,64 @@ const Bundlewizard = ({data,programId}) => {
                     onAction: async () => {
                             const request = formData;
                             setLoading(true);
-                    const resp =  await fetch(
-                                    			'https://irad6avdaqvzwto-subscriberdb.adb.us-phoenix-1.oraclecloudapps.com/ords/admin/restsub/manage/bundles',
-                                            {
-                                              method: 'POST',
-                                              body : JSON.stringify(request),
-                                    	  headers: {
-                                                'Content-Type' : 'application/json'
-                                              },
-                                            },
-                                    
-                                          );
-                    const Subid = await resp.json();
-                    if(Subid.bundles )
-                    {
-                      setForm(Subid.bundles,'PROGRAM_ID');
-                      setMessage("Draft Bundle Saved!");
-                      setLoading(false);
-                      if(files && files[0])
-                      {
-                        
-                        const toBase64 = file => new Promise((resolve, reject) => {
-                                           const reader = new FileReader();
-                                           reader.readAsDataURL(file);
-                                           reader.onload = () => resolve(reader.result);
-                                           reader.onerror = error => reject(error);
-                                           });
-                        const data = new FormData();
-                        data.append('image', files[0]);
-                        
-                        const uploadfile = await fetch(
-                                    			'https://subscribenow.app:8443/t/subscriptionsapp/imguploadsubscription',
-                                            {
-                                              method: 'PUT',
-                                              body : await toBase64(files[0]),
-                                    	  headers: {
-                                                
-                                                'pgm_id'  : "b"+Subid.bundles
-                                              },
-                                            },
-                                    
-                                          );
-                      }
-                        
-                        
-                        }
-                    else
-                      setMessage("Error");
+                            if(request.PROGRAM_NAME)
+                            {
+                                    const resp =  await fetch(
+                                      'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundle/save',
+                                        {
+                                          method: 'POST',
+                                          body : JSON.stringify(request),
+                                    headers: {
+                                            'Content-Type' : 'application/json',
+                                            'token'     : AUTHTOKEN
+                                          },
+                                        },
+                                
+                                      );
+                          const Subid = await resp.json();
+                          if(Subid.bundles )
+                          {
+                            setForm(Subid.bundles,'PROGRAM_ID');
+                            setMessage("Draft Bundle Saved!");
+                            setLoading(false);
+                            if(files && files[0])
+                            {
+                              
+                              const toBase64 = file => new Promise((resolve, reject) => {
+                                                const reader = new FileReader();
+                                                reader.readAsDataURL(file);
+                                                reader.onload = () => resolve(reader.result);
+                                                reader.onerror = error => reject(error);
+                                                });
+                              const data = new FormData();
+                              data.append('image', files[0]);
+                              
+                              const uploadfile = await fetch(
+                                                'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundle/uploadimage',
+                                                  {
+                                                    method: 'PUT',
+                                                    body : await toBase64(files[0]),
+                                              headers: {
+                                                      
+                                                      'pgm_id'  : "b"+Subid.bundles,
+                                                      'token'     : AUTHTOKEN
+                                                    },
+                                                  },
+                                          
+                                                );
+                            }
+                              
+                            
+                            }
+                        else
+                          setMessage("Error");
+
+                            }
+                            else
+                            {
+                              setMessage("Please enter a program name");
+                            }
+                    
                             setLoading(false);
                             
                       },
@@ -183,12 +182,13 @@ const Bundlewizard = ({data,programId}) => {
               request.STATUS = 'DRAFT';
               setLoading(true);
       const resp =  await fetch(
-                            'https://irad6avdaqvzwto-subscriberdb.adb.us-phoenix-1.oraclecloudapps.com/ords/admin/restsub/manage/bundles',
+                            'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundle/save',
                               {
                                 method: 'POST',
                                 body : JSON.stringify(request),
                           headers: {
-                                  'Content-Type' : 'application/json'
+                                  'Content-Type' : 'application/json',
+                                  'token'     : AUTHTOKEN
                                 },
                               },
                       
@@ -219,12 +219,13 @@ const Bundlewizard = ({data,programId}) => {
               const request = formData;
               setLoading(true);
                 const result = await fetch(
-                'https://irad6avdaqvzwto-subscriberdb.adb.us-phoenix-1.oraclecloudapps.com/ords/admin/restsub/manage/bundle/'+ formData.PROGRAM_ID+'/'+formData.REVISION_NUMBER,
+                'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundle/'+ formData.PROGRAM_ID+'/'+formData.REVISION_NUMBER,
                 {
                   method: 'DELETE',
                   body : JSON.stringify(request),
                 headers: {
-                    'Content-Type' : 'application/json'
+                    'Content-Type' : 'application/json',
+                    'token'     : AUTHTOKEN
                   },
                 },
         
