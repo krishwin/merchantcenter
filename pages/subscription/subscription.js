@@ -176,7 +176,7 @@ import { useRouter } from 'next/router';
         
           const errorMessage = hasError && (
             <Banner
-              title="The following images couldn’t be uploaded:"
+              title="The following images couldnï¿½t be uploaded:"
               status="critical"
             >
               <List type="bullet">
@@ -271,7 +271,7 @@ import { useRouter } from 'next/router';
       
       subtitle={programdesc}
 	     
-          thumbnail={   <Thumbnail source={"https://objectstorage.us-phoenix-1.oraclecloud.com/n/axzxx9cwmhzp/b/subscribenow/o/"+id}/>}
+          thumbnail={   <Thumbnail source={"https://objectstorage.us-phoenix-1.oraclecloud.com/n/axzxx9cwmhzp/b/subscribenowdev/o/"+id}/>}
        primaryAction={<Button onClick={() => {
     
     setRevision((parseInt(revision) + 1)+'' );

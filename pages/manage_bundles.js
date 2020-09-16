@@ -37,7 +37,7 @@ const [selectedItems, setSelectedItems] = useState([]);
     useEffect(() => {
     	const fetchData = async () => {
       const result = await fetch(
-			'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundle/all/'+SHOPORIGIN,
+			'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundles_dev/all/'+SHOPORIGIN,
         {
           method: 'GET',
 	  headers: {
@@ -150,10 +150,8 @@ const [selectedItems, setSelectedItems] = useState([]);
 
 function renderItem(item) {
     const {PROGRAM_ID, URL, PROGRAM_NAME, GROUP_LIST, latestOrderUrl,PROGRAM_DESCRIPTION,REVISION_NUMBER,STATUS} = item;
-    const media = <Thumbnail source={"https://objectstorage.us-phoenix-1.oraclecloud.com/n/axzxx9cwmhzp/b/subscribenow/o/b"+PROGRAM_ID}/>;
-    const shortcutActions = latestOrderUrl
-      ? [{content: 'View latest order', url: latestOrderUrl}]
-      : null;
+    const media = <Thumbnail source={"https://objectstorage.us-phoenix-1.oraclecloud.com/n/axzxx9cwmhzp/b/subscribenowdev/o/b"+PROGRAM_ID}/>;
+    const shortcutActions = [{content: 'View latest order', url: latestOrderUrl},{content: 'Recommendations', url: "/BundleRecommend?id="+PROGRAM_ID+"&rev="+REVISION_NUMBER}];
     return (
       <ResourceItem
         id={PROGRAM_ID}

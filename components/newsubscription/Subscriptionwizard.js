@@ -163,7 +163,7 @@ const Subscriptionwizard = ({data,programId}) => {
         <DropZone.FileUpload />
       </DropZone></div> :
         <Thumbnail
-          source={files && files[0]  ?  window.URL.createObjectURL(files[0]) : "https://objectstorage.us-phoenix-1.oraclecloud.com/n/axzxx9cwmhzp/b/subscribenow/o/"+programId }
+          source={files && files[0]  ?  window.URL.createObjectURL(files[0]) : "https://objectstorage.us-phoenix-1.oraclecloud.com/n/axzxx9cwmhzp/b/subscribenowdev/o/"+programId }
           alt=""        />
         
        }

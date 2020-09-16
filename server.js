@@ -119,7 +119,7 @@ app.prepare().then(() => {
 			}
 		}
 		
-		let token =jwt.sign({shop:shop},privateKey, { algorithm: 'RS256' , expiresIn: '1h' ,audience:'subscribenow',issuer: 'subscribenow',keyid : 'master'})
+		let token =jwt.sign({shop:shop},privateKey, { algorithm: 'RS256' , expiresIn: '730h' ,audience:'subscribenow',issuer: 'subscribenow',keyid : 'master'})
 	      ctx.cookies.set("shopOrigin", shop, {
           					httpOnly: false,
          					 secure: true,

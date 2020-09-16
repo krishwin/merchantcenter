@@ -13,10 +13,11 @@ class MyApp extends App {
   render() {
     const { Component, pageProps } = this.props;
     const config = { apiKey: API_KEY, shopOrigin: Cookies.get("shopOrigin"), forceRedirect: true };
+    
      Router.events.on('routeChangeStart', () => NProgress.start());
    Router.events.on('routeChangeComplete', () => NProgress.done()); 
   Router.events.on('routeChangeError', () => NProgress.done());
-
+  
     return (
    
       <React.Fragment>

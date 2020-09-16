@@ -52,7 +52,7 @@ const new_bundle = () =>
           useEffect(() => {
             const fetchData = async () => {
         const result = await fetch(
-        'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundle/'+ id+'/'+rev,
+        'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundles_dev/'+ id+'/'+rev,
         {
           method: 'GET',
         headers: {

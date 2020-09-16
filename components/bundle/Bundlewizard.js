@@ -86,7 +86,7 @@ const Bundlewizard = ({data,programId}) => {
                             if(request.PROGRAM_NAME)
                             {
                                     const resp =  await fetch(
-                                      'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundle/save',
+                                      'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundles_dev/save',
                                         {
                                           method: 'POST',
                                           body : JSON.stringify(request),
@@ -116,7 +116,7 @@ const Bundlewizard = ({data,programId}) => {
                               data.append('image', files[0]);
                               
                               const uploadfile = await fetch(
-                                                'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundle/uploadimage',
+                                                'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundles_dev/uploadimage',
                                                   {
                                                     method: 'PUT',
                                                     body : await toBase64(files[0]),
@@ -161,7 +161,7 @@ const Bundlewizard = ({data,programId}) => {
         <DropZone.FileUpload />
       </DropZone></div> :
         <Thumbnail
-          source={files && files[0]  ?  window.URL.createObjectURL(files[0]) : "https://objectstorage.us-phoenix-1.oraclecloud.com/n/axzxx9cwmhzp/b/subscribenow/o/b"+programId }
+          source={files && files[0]  ?  window.URL.createObjectURL(files[0]) : "https://objectstorage.us-phoenix-1.oraclecloud.com/n/axzxx9cwmhzp/b/subscribenowdev/o/b"+programId }
           alt=""        />
         
        }
@@ -182,7 +182,7 @@ const Bundlewizard = ({data,programId}) => {
               request.STATUS = 'DRAFT';
               setLoading(true);
       const resp =  await fetch(
-                            'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundle/save',
+                            'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundles_dev/save',
                               {
                                 method: 'POST',
                                 body : JSON.stringify(request),
@@ -219,7 +219,7 @@ const Bundlewizard = ({data,programId}) => {
               const request = formData;
               setLoading(true);
                 const result = await fetch(
-                'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundle/'+ formData.PROGRAM_ID+'/'+formData.REVISION_NUMBER,
+                'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundles_dev/'+ formData.PROGRAM_ID+'/'+formData.REVISION_NUMBER,
                 {
                   method: 'DELETE',
                   body : JSON.stringify(request),

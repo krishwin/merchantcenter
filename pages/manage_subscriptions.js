@@ -148,7 +148,7 @@ const [selectedItems, setSelectedItems] = useState([]);
 
 function renderItem(item) {
     const {PROGRAM_ID, URL, PROGRAM_NAME, GROUP_LIST, latestOrderUrl,PROGRAM_DESCRIPTION,REVISION_NUMBER,STATUS} = item;
-    const media = <Thumbnail source={"https://objectstorage.us-phoenix-1.oraclecloud.com/n/axzxx9cwmhzp/b/subscribenow/o/"+PROGRAM_ID}/>;
+    const media = <Thumbnail source={"https://objectstorage.us-phoenix-1.oraclecloud.com/n/axzxx9cwmhzp/b/subscribenowdev/o/"+PROGRAM_ID}/>;
     const shortcutActions = latestOrderUrl
       ? [{content: 'View latest order', url: latestOrderUrl}]
       : null;
