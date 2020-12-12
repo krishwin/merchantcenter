@@ -3,7 +3,7 @@ import {Page} from '@shopify/polaris';
 import {PlusMinor} from '@shopify/polaris-icons';
 import {Thumbnail, Button, Card, Filters, 
   ResourceItem, ResourceList, TextField, TextStyle,Spinner,Stack,Badge} from '@shopify/polaris';
-import {AUTHTOKEN,SHOPORIGIN ,SHOPID} from '../common/constants'
+import {AUTHTOKEN,SHOPORIGIN ,SHOPID,API_HOST} from '../common/constants'
 require('isomorphic-fetch');
 
 
@@ -37,7 +37,7 @@ const [selectedItems, setSelectedItems] = useState([]);
     useEffect(() => {
     	const fetchData = async () => {
       const result = await fetch(
-			'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundles_dev/all/'+SHOPORIGIN,
+        API_HOST+'/all/'+SHOPORIGIN,
         {
           method: 'GET',
 	  headers: {

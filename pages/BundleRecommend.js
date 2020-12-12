@@ -4,7 +4,7 @@ import {PlusMinor} from '@shopify/polaris-icons';
 import { useRouter } from 'next/router';
 import {Thumbnail, Button, Card, Filters, 
   ResourceItem, ResourceList, TextField, TextStyle,Spinner,Stack,Badge,Frame,FormLayout} from '@shopify/polaris';
-import {AUTHTOKEN,SHOPORIGIN ,SHOPID} from '../common/constants';
+import {AUTHTOKEN,SHOPORIGIN ,SHOPID,API_HOST} from '../common/constants';
 import {RecommendationsList} from '../components/Recos';
 import {AddRecommendation} from '../components/Recos';
 require('isomorphic-fetch');
@@ -30,21 +30,74 @@ const BundleRecommend = () => {
     const [recommendations,setRecommendations] = useState([]);
     const [addReco,setAddReco] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [payload,setPayload] = useState({});
     const changeData = useCallback(
         (value) => setData(value),
         [],
     );
 
-    const addrecommendations = (selectedProducts) => {
-      const reco = {id:Date.now,products:selectedProducts}
-      setRecommendations( recommendations.concat(reco) );
-      console.log(recommendations);
+    const addrecommendations = async (selectedProducts) => {
+      const reco = {id:id,recommendation: {id:Date.now(),products:selectedProducts}};
+      
+      let request = reco;
+   
+      const response = await fetch(
+        API_HOST+'/recommendations',
+        {
+          method: 'POST',
+          body:  JSON.stringify(request),
+        headers: {
+            'Content-Type' : 'application/json',
+            'token'     : AUTHTOKEN,
+            'store'     : SHOPORIGIN.split('.')[0]
+          },
+        },
+
+        );
+        let respstatus = await response.json();
+        if(respstatus.store)
+        {
+          setRecommendations(respstatus.bundles.find((bundle) => bundle.id ===id).recommendations );
+          return 'Success'; 
+        }else
+        return 'Error';
+             
+    }
+
+    const removerecommendations = async (rec_id) => {
+      const reco = {bundle_id:id,rec_id: rec_id};
+      
+      let request = reco;
+   
+      const response = await fetch(
+        API_HOST+'/recommendations',
+        {
+          method: 'DELETE',
+          body:  JSON.stringify(request),
+        headers: {
+            'Content-Type' : 'application/json',
+            'token'     : AUTHTOKEN,
+            'store'     : SHOPORIGIN.split('.')[0],
+            'Cache-Control': 'no-cache'
+          },
+        },
+
+        );
+        let respstatus = await response.json();
+        if(respstatus.store)
+        {
+          setRecommendations( respstatus.bundles.find((bundle) => bundle.id ===id).recommendations );
+          return 'Success';
+        }
+        else
+        return 'Error';
+             
     }
     
           useEffect(() => {
             const fetchData = async () => {
         const result = await fetch(
-        'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundles_dev/'+ id+'/'+rev,
+          API_HOST+'/'+ id+'/'+rev,
         {
           method: 'GET',
         headers: {
@@ -71,7 +124,7 @@ const BundleRecommend = () => {
   
           );
           let subresp = await result.json();   
-
+          setPayload(subresp);
           let bundle =  subresp.bundles.find((bundle) => bundle.id ===id);    
           if(bundle && bundle.recommendations)
           setRecommendations(bundle.recommendations);
@@ -80,8 +133,8 @@ const BundleRecommend = () => {
           setLoading(false);
           }
       
-         fetchData();
-         fetchreco();
+          fetchData();
+          fetchreco();
         
 
         
@@ -97,9 +150,9 @@ const BundleRecommend = () => {
        
          separator
 	    >
-         <FormLayout>{ loading ? <Spinner accessibilityLabel="Spinner example" size="large" color="teal" /> :
+         <FormLayout>{  loading ? <Spinner accessibilityLabel="Spinner example" size="large" color="teal" /> :
              addReco ? <AddRecommendation data={data} setAddReco={setAddReco} addrecommendations={addrecommendations}></AddRecommendation>  :
-             <RecommendationsList data={data} loading={loading} recommendations={recommendations ?recommendations :[]}/>
+             data && data.bundles ? <RecommendationsList data={data} loading={loading} recommendations={recommendations ?recommendations :[] } removerecommendations={removerecommendations}/> : ''
          }
          <br/>
          

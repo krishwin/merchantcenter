@@ -27,7 +27,7 @@ import {
   Banner, Caption, DropZone, List, Thumbnail,Spinner
 } from '@shopify/polaris';
 import moment from 'moment';
-import {AUTHTOKEN,SHOPORIGIN ,SHOPID} from '../../common/constants';
+import {AUTHTOKEN,SHOPORIGIN ,SHOPID,API_HOST} from '../../common/constants';
 import translations from '@shopify/polaris/locales/en.json';
 
 const steps = [
@@ -86,7 +86,7 @@ const Bundlewizard = ({data,programId}) => {
                             if(request.PROGRAM_NAME)
                             {
                                     const resp =  await fetch(
-                                      'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundles_dev/save',
+                                      API_HOST+'/bundles_dev/save',
                                         {
                                           method: 'POST',
                                           body : JSON.stringify(request),
@@ -116,7 +116,7 @@ const Bundlewizard = ({data,programId}) => {
                               data.append('image', files[0]);
                               
                               const uploadfile = await fetch(
-                                                'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundles_dev/uploadimage',
+                                API_HOST+'/uploadimage',
                                                   {
                                                     method: 'PUT',
                                                     body : await toBase64(files[0]),
@@ -182,7 +182,7 @@ const Bundlewizard = ({data,programId}) => {
               request.STATUS = 'DRAFT';
               setLoading(true);
       const resp =  await fetch(
-                            'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundles_dev/save',
+        API_HOST+'bundles_dev/save',
                               {
                                 method: 'POST',
                                 body : JSON.stringify(request),
@@ -219,7 +219,7 @@ const Bundlewizard = ({data,programId}) => {
               const request = formData;
               setLoading(true);
                 const result = await fetch(
-                'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundles_dev/'+ formData.PROGRAM_ID+'/'+formData.REVISION_NUMBER,
+                  API_HOST+'/'+ formData.PROGRAM_ID+'/'+formData.REVISION_NUMBER,
                 {
                   method: 'DELETE',
                   body : JSON.stringify(request),

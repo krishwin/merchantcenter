@@ -10,7 +10,7 @@ const Productwrapper = ({items,setActive,setProducttitle,addSelectedProducts,col
               console.log(item);
               setProducttitle(item.node.title);
               setActive(false);
-              addSelectedProducts({product_level:collection.PROGRAM_LEVEL,name:item.node.title,id:item.node.id,image:item.node.images.edges[0].node.src});
+              addSelectedProducts({product_level:collection.PROGRAM_LEVEL,name:item.node.title,id:item.node.id,image:item.node.images.edges[0].node.src,price:item.node.variants.edges[0].node.price});
             },[items]);
     const renderItem = (item) =>{
         const {id, images, title} = item.node;

@@ -3,7 +3,7 @@ import {Bundlewizard} from  '../components/bundle';
 import { useRouter } from 'next/router';
 import {Spinner} from '@shopify/polaris';
 import  {  cloneDeepLimited } from '../common/utils';
-import {AUTHTOKEN,SHOPORIGIN ,SHOPID} from '../common/constants';
+import {AUTHTOKEN,SHOPORIGIN ,SHOPID,API_HOST} from '../common/constants';
 const defaultData = {
   PROGRAM_ID:'-1',
   PROGRAM_NAME:'',
@@ -52,7 +52,7 @@ const new_bundle = () =>
           useEffect(() => {
             const fetchData = async () => {
         const result = await fetch(
-        'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundles_dev/'+ id+'/'+rev,
+          API_HOST+'/'+ id+'/'+rev,
         {
           method: 'GET',
         headers: {

@@ -2,7 +2,7 @@ import React, {useCallback, useState,useEffect} from 'react';
 import {
     Button,
     Card,   
-    Select,
+    Toast,
     ChoiceList,
     TextField
   } from '@shopify/polaris';
@@ -20,9 +20,17 @@ const AddRecommendation = ({data,setAddReco,addrecommendations}) => {
         setSelectedProducts(newarray);
         console.log(selectedProducts);
     });
+
+        const [active, setActive] = useState(false);
+
+        const toggleActive = useCallback(() => setActive((active) => !active), []);
+
+        const toastMarkup = active ? (
+            <Toast content="Failed!!! try again" onDismiss={toggleActive} />
+        ) : null;
     return(
         <div>
-            {  data.products ?
+            {  data && data.products ?
                 data.products.map(product => {
                     return <Card title={'Pick a ' + product.PRODUCT_DESC} sectioned subdued={false}>
                    <ProductPicker collection={product} addSelectedProducts={addSelectedProducts} >
@@ -38,8 +46,11 @@ const AddRecommendation = ({data,setAddReco,addrecommendations}) => {
          <Button primary onClick={() => {setAddReco(false);}}>Cancel</Button>
          </div>
       <div style={{float:"right"}}>
-      <Button primary onClick={() => {
-          addrecommendations(selectedProducts);
+      <Button primary onClick={async () => {
+          let status = await addrecommendations(selectedProducts);
+          if(status != 'Success')
+          toggleActive;
+          else
           setAddReco(false);
             }}>Save</Button>
       </div>

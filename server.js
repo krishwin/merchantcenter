@@ -12,7 +12,7 @@ const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
-
+import {ADB_HOST} from './common/constants' 
 const { SHOPIFY_API_SECRET_KEY, SHOPIFY_API_KEY } = process.env;
 const  privateKey = fs.readFileSync('keys/rsa.private');
 
@@ -25,16 +25,16 @@ app.prepare().then(() => {
     createShopifyAuth({
       apiKey: SHOPIFY_API_KEY,
       secret: SHOPIFY_API_SECRET_KEY,
-	  scopes: ['read_products','read_customers','write_customers','read_orders','read_discounts','write_discounts','read_price_rules','write_price_rules'],
+	  scopes: ['read_products','read_customers','write_customers','read_orders','read_discounts','write_discounts','read_price_rules','write_price_rules','read_draft_orders','write_draft_orders'],
 	  accessMode: 'offline',
       async afterAuth(ctx) {
 		const { shop, accessToken,accessTokenData } = ctx.session;
 		let storeid = -1;
-	console.log(accessToken);
-	      if(accessToken.associated_user)
+		console.log(accessToken);
+		if(accessToken.associated_user)
 		{
 			const response =  await fetch(
-        'https://irad6avdaqvzwto-subscriberdb.adb.us-phoenix-1.oraclecloudapps.com/ords/admin/restsub/parties/?p_cust_email='+accessTokenData.associated_user.email+'&p_cust_store='+shop,
+				ADB_HOST+'/parties/?p_cust_email='+accessTokenData.associated_user.email+'&p_cust_store='+shop,
         {
           method: 'GET',
           headers: {
@@ -58,7 +58,7 @@ app.prepare().then(() => {
 				console.log(JSON.stringify(payload));
 
 				const response =  await fetch(
-					'https://irad6avdaqvzwto-subscriberdb.adb.us-phoenix-1.oraclecloudapps.com/ords/admin/restsub/parties/',
+					ADB_HOST+'/parties/',
 					{
 					  method: 'POST',
 					  body: JSON.stringify(payload),
@@ -76,7 +76,7 @@ app.prepare().then(() => {
 		}else
 		{
 			const response =  await fetch(
-				'https://irad6avdaqvzwto-subscriberdb.adb.us-phoenix-1.oraclecloudapps.com/ords/admin/restsub/parties/'+shop,
+				ADB_HOST+'parties/'+shop,
 				{
 				  method: 'GET',
 				  headers: {
@@ -102,7 +102,7 @@ app.prepare().then(() => {
 				console.log(JSON.stringify(payload));
 
 				const response =  await fetch(
-					'https://irad6avdaqvzwto-subscriberdb.adb.us-phoenix-1.oraclecloudapps.com/ords/admin/restsub/parties/',
+					ADB_HOST+'/parties/',
 					{
 					  method: 'PUT',
 					  body: JSON.stringify(payload),

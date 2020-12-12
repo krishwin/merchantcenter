@@ -1,6 +1,6 @@
 import React, {useCallback, useState,useEffect} from 'react';
 import {ProgressBar,Toast,Banner} from '@shopify/polaris';
-import {AUTHTOKEN,SHOPORIGIN ,SHOPID} from '../../common/constants';
+import {AUTHTOKEN,SHOPORIGIN ,SHOPID,API_HOST} from '../../common/constants';
 const PublishForm = ({ formData, setForm,navigation }) =>  {
     const [loading, setLoading] = useState( true);
     const [active, setActive] = useState(false);
@@ -21,7 +21,7 @@ const PublishForm = ({ formData, setForm,navigation }) =>  {
             request.STATUS = 'PUBLISHED';
             
             const discresp =  await fetch(
-                'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundles_dev/discount',
+              API_HOST+'/bundles_dev/discount',
             {
               method: 'POST',
               body : JSON.stringify(request),
@@ -44,7 +44,7 @@ const PublishForm = ({ formData, setForm,navigation }) =>  {
               setForm(discount.discount_code.id,'DISCOUNT_ID');
               setForm(discount.discount_code.code,'DISCOUNT_CODE');
               const resp =  await fetch(
-                'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundles_dev/save',
+                API_HOST+'/save',
             {
               method: 'POST',
               body : JSON.stringify(request),
