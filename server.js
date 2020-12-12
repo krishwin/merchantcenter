@@ -12,8 +12,7 @@ const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
-import {ADB_HOST} from './common/constants' 
-const { SHOPIFY_API_SECRET_KEY, SHOPIFY_API_KEY } = process.env;
+const { SHOPIFY_API_SECRET_KEY, SHOPIFY_API_KEY ,ADB_HOST} = process.env;
 const  privateKey = fs.readFileSync('keys/rsa.private');
 
 app.prepare().then(() => {
