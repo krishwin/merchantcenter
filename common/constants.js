@@ -31,12 +31,12 @@ const shopid = env => {
     return shopid;
 };
 
-const ADB_HOST = env =>{
+const adb_host = env =>{
     let adb_host = "https://irad6avdaqvzwto-subscriberdb.adb.us-phoenix-1.oraclecloudapps.com/ords/admin/restsub";
     return adb_host;
 };
 
-const API_HOST = env =>{
+const api_host = env =>{
     let api_host = "https://subscribenow.app:8443/bundles_dev";
     return api_host;
 };
@@ -46,8 +46,8 @@ export const constants = Object.freeze({
     AUTHTOKEN : authtoken(" "),
     SHOPORIGIN : shopOrigin(" "),
     SHOPID      : shopid(" "),
-    ADB_HOST    : ADB_HOST(" "),
-    API_HOST    : API_HOST(" "),
+    ADB_HOST    : adb_host(" "),
+    API_HOST    : api_host(" "),
 });
 
 export const {AUTHTOKEN} =constants;
