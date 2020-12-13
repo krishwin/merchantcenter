@@ -75,7 +75,7 @@ app.prepare().then(() => {
 		}else
 		{
 			const response =  await fetch(
-				ADB_HOST+'parties/'+shop,
+				ADB_HOST+'/parties/'+shop,
 				{
 				  method: 'GET',
 				  headers: {
