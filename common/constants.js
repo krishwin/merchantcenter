@@ -37,7 +37,7 @@ const adb_host = env =>{
 };
 
 const api_host = env =>{
-    let api_host = "https://subscribenow.app:8443/bundles_dev";
+    let api_host = "https://subscribenow.app:8443/bundles";
     return api_host;
 };
 
