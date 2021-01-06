@@ -87,7 +87,7 @@ const Bundlewizard = ({data,programId}) => {
                             if(request.PROGRAM_NAME)
                             {
                                     const resp =  await fetch(
-                                      API_HOST+'/bundles_dev/save',
+                                      API_HOST+'/save',
                                         {
                                           method: 'POST',
                                           body : JSON.stringify(request),
