@@ -2,8 +2,8 @@ import React, {useCallback, useState,useEffect} from 'react';
 import {Page} from '@shopify/polaris';
 import {PlusMinor} from '@shopify/polaris-icons';
 import {Thumbnail, Button, Card, Filters, 
-  ResourceItem, ResourceList, TextField, TextStyle,Spinner,Stack,Badge} from '@shopify/polaris';
-import {AUTHTOKEN,SHOPORIGIN ,SHOPID,API_HOST} from '../common/constants'
+  ResourceItem, ResourceList, TextField, TextStyle,Spinner,Stack,Badge,Pagination} from '@shopify/polaris';
+import {AUTHTOKEN,SHOPORIGIN ,SHOPID,API_HOST,ASSETS_HOST} from '../common/constants';
 require('isomorphic-fetch');
 
 
@@ -15,6 +15,10 @@ const [selectedItems, setSelectedItems] = useState([]);
   const [queryValue, setQueryValue] = useState(null);
   const [bundles,setBundles] = useState([]);	 
   const [loading,setLoading]= useState(true);
+  const [pagenum,setPagenum] = useState(1);
+  const [displedItems,setDisplayedItems] = useState([]);
+  const [isFirstPage,setisFirstPage] = useState(false);
+  const [isLastPage,setisLastPage] = useState(false);
   const handleTaggedWithChange = useCallback(
     (value) => setTaggedWith(value),
     [],
@@ -50,6 +54,15 @@ const [selectedItems, setSelectedItems] = useState([]);
 		let resp = await result.json()
 		console.log(resp);
     setBundles(resp.bundles);
+    resp.bundles ? setDisplayedItems(resp.bundles.slice(0,5)):setDisplayedItems([]);
+    if(resp.bundles)
+    {
+      setisFirstPage(true);
+      if(resp.bundles.length > 5)
+      setisLastPage(false);
+      else
+      setisLastPage(true);
+    }
  setLoading(false);
 
     }
@@ -123,26 +136,73 @@ const [selectedItems, setSelectedItems] = useState([]);
     </Filters>
   );
 
+  function handlePreviousPage() {
+    
+    console.log(pagenum);
+    let startIndex;
+    if(pagenum -1  == '1' )
+    startIndex=  0;
+    else
+    startIndex = (pagenum -1 )*5;
+    setDisplayedItems(bundles.slice(startIndex,startIndex+5));
+    if(startIndex== 0)
+    {
+      setisFirstPage(true);
+    }
+    setisLastPage(false);
+
+    setPagenum(pagenum-1);
+  }
+
+  function handleNextPage() {
+    
+    let startIndex = pagenum*5;
+    setDisplayedItems(bundles.slice(startIndex,startIndex+5));
+    if(!bundles[startIndex+6])
+    {
+      setisLastPage(true);
+    }
+    setisFirstPage(false);
+    setPagenum(pagenum+1);
+
+  }
+
+
+  const  pagination = bundles.length > 0 ?
+     (
+      <div style={{display:"flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "24px 16px",
+        borderTop: "1px solid #dfe4e8"}}>
+      <Pagination
+    
+      hasPrevious={!isFirstPage}
+      hasNext={!isLastPage}
+    onNext={handleNextPage}
+    onPrevious={handlePreviousPage}
+    />
+            </div>
+):'';
+    
+
     return (
 <Page
   fullWidth
   title="Manage Bundles"
   primaryAction={<Button primary url="/new_bundle">Create Bundles</Button>}
-  secondaryActions={[{content: 'Export'}]}
-  pagination={{
-    hasNext: true,
-  }}
 >
       
 	    <Card>
       <ResourceList
         resourceName={resourceName}
-        items={bundles}
+        items={displedItems}
         renderItem={renderItem}
-        
-        filterControl={filterControl}
         loading={loading}
+       
+
       />
+       {pagination}
     </Card>
     
 </Page>
@@ -150,7 +210,7 @@ const [selectedItems, setSelectedItems] = useState([]);
 
 function renderItem(item) {
     const {PROGRAM_ID, URL, PROGRAM_NAME, GROUP_LIST, latestOrderUrl,PROGRAM_DESCRIPTION,REVISION_NUMBER,STATUS} = item;
-    const media = <Thumbnail source={"https://objectstorage.us-phoenix-1.oraclecloud.com/n/axzxx9cwmhzp/b/subscribenowdev/o/b"+PROGRAM_ID}/>;
+    const media = <Thumbnail source={ASSETS_HOST+"/b"+PROGRAM_ID}/>;
     const shortcutActions = [{content: 'View latest order', url: latestOrderUrl},{content: 'Recommendations', url: "/BundleRecommend?id="+PROGRAM_ID+"&rev="+REVISION_NUMBER}];
     return (
       <ResourceItem
@@ -191,6 +251,10 @@ function renderItem(item) {
       return value === '' || value == null;
     }
   }
+
+
+
+
   }
   
 export default manage_bundles;

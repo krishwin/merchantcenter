@@ -3,7 +3,7 @@ import {Page} from '@shopify/polaris';
 import {PlusMinor} from '@shopify/polaris-icons';
 import { useRouter } from 'next/router';
 import {Thumbnail, Button, Card, Filters, 
-  ResourceItem, ResourceList, TextField, TextStyle,Spinner,Stack,Badge,Frame,FormLayout} from '@shopify/polaris';
+  ResourceItem, ResourceList, TextField, TextStyle,Spinner,Stack,Badge,Frame,FormLayout,Pagination} from '@shopify/polaris';
 import {AUTHTOKEN,SHOPORIGIN ,SHOPID,API_HOST} from '../common/constants';
 import {RecommendationsList} from '../components/Recos';
 import {AddRecommendation} from '../components/Recos';
@@ -35,6 +35,12 @@ const BundleRecommend = () => {
         (value) => setData(value),
         [],
     );
+    const [isFirstPage,setisFirstPage] = useState(false);
+  const [isLastPage,setisLastPage] = useState(false);
+  const [pagenum,setPagenum] = useState(1);
+  const [displedItems,setDisplayedItems] = useState([]);
+
+
 
     const addrecommendations = async (selectedProducts) => {
       const reco = {id:id,recommendation: {id:Date.now(),products:selectedProducts}};
@@ -58,6 +64,7 @@ const BundleRecommend = () => {
         if(respstatus.store)
         {
           setRecommendations(respstatus.bundles.find((bundle) => bundle.id ===id).recommendations );
+          
           return 'Success'; 
         }else
         return 'Error';
@@ -77,8 +84,7 @@ const BundleRecommend = () => {
         headers: {
             'Content-Type' : 'application/json',
             'token'     : AUTHTOKEN,
-            'store'     : SHOPORIGIN.split('.')[0],
-            'Cache-Control': 'no-cache'
+            'store'     : SHOPORIGIN.split('.')[0]
           },
         },
 
@@ -87,6 +93,7 @@ const BundleRecommend = () => {
         if(respstatus.store)
         {
           setRecommendations( respstatus.bundles.find((bundle) => bundle.id ===id).recommendations );
+          
           return 'Success';
         }
         else
@@ -103,6 +110,7 @@ const BundleRecommend = () => {
         headers: {
             'Content-Type' : 'application/json',
             'token'     : AUTHTOKEN
+            
           },
         },
 
@@ -113,12 +121,13 @@ const BundleRecommend = () => {
         
         const fetchreco = async () => {
           const result = await fetch(
-          'https://objectstorage.us-phoenix-1.oraclecloud.com/n/axzxx9cwmhzp/b/'+SHOPORIGIN.split('.')[0]+'/o/recommendations.json',
+            API_HOST+'/recommendations',
           {
             method: 'GET',
           headers: {
               'Content-Type' : 'application/json',
-              'token'     : AUTHTOKEN
+              'token'     : AUTHTOKEN,
+              'store'     : SHOPORIGIN.split('.')[0],
             },
           },
   
@@ -128,6 +137,16 @@ const BundleRecommend = () => {
           let bundle =  subresp.bundles.find((bundle) => bundle.id ===id);    
           if(bundle && bundle.recommendations)
           setRecommendations(bundle.recommendations);
+
+         /* bundle.recommendations ? setDisplayedItems(bundle.recommendations.slice(0,2)):setDisplayedItems([]);
+          if(bundle.recommendations)
+          {
+            setisFirstPage(true);
+            if(bundle.recommendations.length > 2)
+            setisLastPage(false);
+            else
+            setisLastPage(true);
+          }*/
           
 
           setLoading(false);
@@ -139,6 +158,65 @@ const BundleRecommend = () => {
 
         
         },[]);
+
+        useEffect(() => {
+          setDisplayedItems(recommendations.slice(0,2));
+          setisFirstPage(true);
+          setPagenum(1);
+            if(recommendations.length > 2)
+            setisLastPage(false);
+            else
+            setisLastPage(true);
+        },[recommendations]);
+
+        function handlePreviousPage() {
+    
+          console.log(pagenum);
+          let startIndex;
+          if(pagenum -1  == '1' )
+          startIndex=  0;
+          else
+          startIndex = (pagenum -1 )*2;
+          setDisplayedItems(recommendations.slice(startIndex,startIndex+2));
+          if(startIndex== 0)
+          {
+            setisFirstPage(true);
+          }
+          setisLastPage(false);
+      
+          setPagenum(pagenum-1);
+        }
+      
+        function handleNextPage() {
+          
+          let startIndex = pagenum*2;
+          setDisplayedItems(recommendations.slice(startIndex,startIndex+2));
+          if(!recommendations[startIndex+2])
+          {
+            setisLastPage(true);
+          }
+          setisFirstPage(false);
+          setPagenum(pagenum+1);
+      
+        }
+      
+      
+        const  pagination = recommendations.length > 0 ?
+           (
+            <div style={{display:"flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "24px 16px",
+              borderTop: "1px solid #dfe4e8"}}>
+            <Pagination
+          
+            hasPrevious={!isFirstPage}
+            hasNext={!isLastPage}
+          onNext={handleNextPage}
+          onPrevious={handlePreviousPage}
+          />
+                  </div>
+      ):'';
 
         return (
           <ApolloProvider client={client}> 
@@ -152,10 +230,10 @@ const BundleRecommend = () => {
 	    >
          <FormLayout>{  loading ? <Spinner accessibilityLabel="Spinner example" size="large" color="teal" /> :
              addReco ? <AddRecommendation data={data} setAddReco={setAddReco} addrecommendations={addrecommendations}></AddRecommendation>  :
-             data && data.bundles ? <RecommendationsList data={data} loading={loading} recommendations={recommendations ?recommendations :[] } removerecommendations={removerecommendations}/> : ''
+             data && data.bundles ? <RecommendationsList data={data} loading={loading} recommendations={recommendations ?displedItems :[] } removerecommendations={removerecommendations}/> : ''
          }
          <br/>
-         
+         {pagination}
            </FormLayout>
         
       </Page>

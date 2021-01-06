@@ -21,7 +21,7 @@ const PublishForm = ({ formData, setForm,navigation }) =>  {
             request.STATUS = 'PUBLISHED';
             
             const discresp =  await fetch(
-              API_HOST+'/bundles_dev/discount',
+              API_HOST+'/discount',
             {
               method: 'POST',
               body : JSON.stringify(request),

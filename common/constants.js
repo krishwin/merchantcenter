@@ -37,17 +37,21 @@ const adb_host = env =>{
 };
 
 const api_host = env =>{
-    let api_host = "https://subscribenow.app:8443/bundle";
+    let api_host = "https://api.subscribenow.app/bundles_dev";
     return api_host;
 };
 
-
+const assets_host = env =>{
+    let assets_host = "https://subscribenow.app/images";
+    return assets_host;
+};
 export const constants = Object.freeze({
     AUTHTOKEN : authtoken(" "),
     SHOPORIGIN : shopOrigin(" "),
     SHOPID      : shopid(" "),
     ADB_HOST    : adb_host(" "),
     API_HOST    : api_host(" "),
+    ASSETS_HOST  : assets_host(" ")
 });
 
 export const {AUTHTOKEN} =constants;
@@ -55,4 +59,5 @@ export const {SHOPORIGIN} =constants;
 export const {SHOPID} = constants;
 export const {ADB_HOST} = constants;
 export const {API_HOST} = constants;
+export const {ASSETS_HOST} = constants;
 export default constants;

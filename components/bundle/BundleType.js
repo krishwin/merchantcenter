@@ -1,4 +1,4 @@
-import React, { useContext,useCallback,useState } from 'react';
+import React, { useContext,useCallback,useState, useEffect } from 'react';
 import {
     Button,
     Card,   
@@ -7,7 +7,7 @@ import {
     TextField
   } from '@shopify/polaris';
   import Dynamicitem from './dynamicitems'  ;
-const BundleType = ({ formData, setForm,navigation }) => {
+const BundleType = ({ formData, setForm,navigation ,setMessage}) => {
     const { previous,next, go } = navigation;
     const {   PROGRAM_TYPE,BOM_ITEM_NO,BOM_ITEM_DESC,BOM_TYPE ,REPEAT_OPTION    }= formData;
     const [packsize, setPacksize] =useState(BOM_ITEM_NO);
@@ -58,6 +58,17 @@ const BundleType = ({ formData, setForm,navigation }) => {
     [packsizeChange, packsize,config],
   );
 
+  useEffect(() => setMessage(""),[]);
+
+  const validate = () => {
+    if(formData.PRODUCTS.length != BOM_ITEM_NO || formData.PRODUCTS.filter(item => item.PRODUCT_ID == "").length > 0)
+    {
+    setMessage("incomple bundle items");
+    }
+    else
+    next();
+  }
+
  
 
    const configoptions = [
@@ -96,7 +107,7 @@ const BundleType = ({ formData, setForm,navigation }) => {
               <Button primary size="large" onClick={previous} >Back</Button>
             </div>
             <div style={{float:"right"}}>
-              <Button primary size="large" onClick={next} >Next</Button>
+              <Button primary size="large" onClick={validate} >Next</Button>
             </div>
     </div>
 

@@ -27,7 +27,7 @@ import {
   Banner, Caption, DropZone, List, Thumbnail,Spinner
 } from '@shopify/polaris';
 import moment from 'moment';
-import {AUTHTOKEN,SHOPORIGIN ,SHOPID,API_HOST} from '../../common/constants';
+import {AUTHTOKEN,SHOPORIGIN ,SHOPID,API_HOST,ASSETS_HOST} from '../../common/constants';
 import translations from '@shopify/polaris/locales/en.json';
 
 const steps = [
@@ -45,10 +45,11 @@ const Bundlewizard = ({data,programId}) => {
   console.log(programId);
   const [formData, setForm] = useForm(data);
   const [files, setFiles] = useState();
-  const { step, navigation } = useStep({ initialStep: 0, steps });
+  const { step, navigation } = useStep({ initialStep: data.STATUS == 'DRAFT' ? 0 : 4, steps });
   const { Component } = step;
-  const props = {  formData, setForm,navigation,files, setFiles};
+
   const [message, setMessage] = useState(data.STATUS == 'DRAFT' ? ['Unsaved Bundle'] : []);
+  const props = {  formData, setForm,navigation,files, setFiles,setMessage};
   const [loading, setLoading] = useState();
   const [pgmstate,setPgmstate] = useState(programId ? 'UPD' : 'NEW')
   const handleDrop = useCallback(
@@ -147,9 +148,7 @@ const Bundlewizard = ({data,programId}) => {
                     loading: false,
                     disabled: false,
                   }}
-                  discardAction={{
-                    onAction: () => console.log('add clear form logic'),
-                  }}
+                  
                 />
                 }
                 <br/>
@@ -161,7 +160,7 @@ const Bundlewizard = ({data,programId}) => {
         <DropZone.FileUpload />
       </DropZone></div> :
         <Thumbnail
-          source={files && files[0]  ?  window.URL.createObjectURL(files[0]) : "https://objectstorage.us-phoenix-1.oraclecloud.com/n/axzxx9cwmhzp/b/subscribenowdev/o/b"+programId }
+          source={files && files[0]  ?  window.URL.createObjectURL(files[0]) : ASSETS_HOST+"/b"+programId }
           alt=""        />
         
        }
@@ -170,6 +169,7 @@ const Bundlewizard = ({data,programId}) => {
         setForm(parseInt(revision) + 1, 'REVISION_NUMBER');
         setForm('DRAFT', 'STATUS');
         setRevise(false);
+        navigation.go(0);
         }}>Create Revision</Button> : ''}
        secondaryActions={[
           {

@@ -1,4 +1,4 @@
-import React, { useContext,useCallback,useState } from 'react';
+import React, { useContext,useCallback,useState ,useEffect} from 'react';
 import {
     Button,
     Card,   
@@ -6,7 +6,7 @@ import {
     ChoiceList,
     TextField
   } from '@shopify/polaris';
-const BundlePricing = ({ formData, setForm,navigation }) => {
+const BundlePricing = ({ formData, setForm,navigation ,setMessage}) => {
 
     const { previous,next, go } = navigation;
     const {   PROGRAM_PRICING_TYPE ,  PROGRAM_PRICING_RATE  }= formData;
@@ -21,6 +21,9 @@ const BundlePricing = ({ formData, setForm,navigation }) => {
         setForm(newValue[0],'PROGRAM_PRICING_TYPE');
      }, []
         );
+
+        useEffect(() => setMessage(""),[]);
+
     const renderChildren = useCallback(
         (isConfig) =>
         isConfig &&  (
@@ -60,7 +63,7 @@ const BundlePricing = ({ formData, setForm,navigation }) => {
           <Button primary size="large" onClick={previous} >Back</Button>
         </div>
         <div style={{float:"right"}}>
-          <Button primary size="large" onClick={next} >Next</Button>
+          <Button primary size="large" onClick={() => PROGRAM_PRICING_TYPE && PROGRAM_PRICING_RATE ? next() : setMessage("Pricing details required")} >Next</Button>
         </div>
    </div>);
  

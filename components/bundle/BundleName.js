@@ -5,7 +5,7 @@ import {
     TextField
   } from '@shopify/polaris';
 
-const BundleName = ({ formData, setForm,navigation }) => {
+const BundleName = ({ formData, setForm,navigation ,setMessage}) => {
 
  const { next, go } = navigation;
  
@@ -20,7 +20,7 @@ const BundleName = ({ formData, setForm,navigation }) => {
             </Card>
             <br/>
             <div style={{float:"right"}}>
-              <Button primary size="large" onClick={next} >Next</Button>
+              <Button primary size="large" onClick={() => PROGRAM_NAME && PROGRAM_DESCRIPTION? next() : setMessage("Name  and Description Required")} >Next</Button>
             </div>
             
      </div>
