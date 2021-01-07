@@ -33,10 +33,10 @@ const PublishForm = ({ formData, setForm,navigation }) =>  {
             },
     
           );*/
-          const discount = await discresp.json();
+          //const discount = await discresp.json();
 
-          if(discount.discount_code && discount.discount_code.id)
-          {
+          //if(discount.discount_code && discount.discount_code.id)
+          //{
               request.PRICE_RULE_ID = -1;//discount.discount_code.price_rule_id;
               request.DISCOUNT_ID = -1//discount.discount_code.id;
               request.DISCOUNT_CODE = '';//discount.discount_code.code;
@@ -68,14 +68,14 @@ const PublishForm = ({ formData, setForm,navigation }) =>  {
                 setMessage('Publish failed. Please try again later.');
                 setStatus("critical");
             }
-          }
+          /*}
           else
           {
             setLoading(false);
             toggleActive();
             setMessage('Publish failed. Please try again later.');
             setStatus("critical");
-          }
+          }*/
         
         }
     publish();
