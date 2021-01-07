@@ -40,9 +40,9 @@ const PublishForm = ({ formData, setForm,navigation }) =>  {
               request.PRICE_RULE_ID = -1;//discount.discount_code.price_rule_id;
               request.DISCOUNT_ID = -1//discount.discount_code.id;
               request.DISCOUNT_CODE = '';//discount.discount_code.code;
-              setForm(discount.discount_code.price_rule_id,'PRICE_RULE_ID');
-              setForm(discount.discount_code.id,'DISCOUNT_ID');
-              setForm(discount.discount_code.code,'DISCOUNT_CODE');
+              //setForm(discount.discount_code.price_rule_id,'PRICE_RULE_ID');
+              //setForm(discount.discount_code.id,'DISCOUNT_ID');
+              //setForm(discount.discount_code.code,'DISCOUNT_CODE');
               const resp =  await fetch(
                 API_HOST+'/save',
             {
