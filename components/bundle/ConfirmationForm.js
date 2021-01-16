@@ -1,7 +1,7 @@
 import React,{useCallback, useState} from 'react';
 import {
     Card,   
-    TextField,
+    DisplayText,
     Button,
     List
   } from '@shopify/polaris';
@@ -28,14 +28,27 @@ const {PROGRAM_ID,PROGRAM_NAME,
  return(
     <div>
          <Card title="Review and Submit" sectioned>
-        
-         <TextField  label="Name" value={PROGRAM_NAME}   disabled />
-         <TextField   label="Description" value={PROGRAM_DESCRIPTION}   disabled />
-         <TextField   label="Program Configuration" value={BOM_TYPE}   disabled />
-         <TextField   label="Pricing"  value={PROGRAM_PRICING_TYPE}    disabled />
-         <TextField   label="Discounted Rate"  value={PROGRAM_PRICING_RATE}    disabled />         
-         <TextField   label="Start Date"  value={moment(PROGRAM_START_DATE).format('MM/DD/YYYY')}    disabled />
-         <TextField   label="End Date" value={moment(PROGRAM_END_DATE).format('MM/DD/YYYY')}    disabled />
+         <Card.Section title="Name and Description">
+
+         <List>
+         <List.Item>  {PROGRAM_NAME}  </List.Item>
+         <List.Item>{PROGRAM_DESCRIPTION} </List.Item>
+         </List>
+         </Card.Section>
+         <Card.Section title="Program Configuration">
+
+         <List>
+         <List.Item> {PROGRAM_PRICING_TYPE}  -  {PROGRAM_PRICING_RATE}   </List.Item> 
+         </List>
+         </Card.Section>
+         <Card.Section title="Dates">
+          <List>
+          {moment(PROGRAM_START_DATE).format('MM/DD/YYYY') } -
+          {moment(PROGRAM_END_DATE).format('MM/DD/YYYY')}   
+          </List>
+          </Card.Section>
+
+         
          <Card.Section title="Products">
          <List type="number">
 
