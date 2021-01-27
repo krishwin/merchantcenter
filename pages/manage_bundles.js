@@ -5,7 +5,7 @@ import {Thumbnail, Button, Card, Filters,
   ResourceItem, ResourceList, TextField, TextStyle,Spinner,Stack,Badge,Pagination} from '@shopify/polaris';
 import {AUTHTOKEN,SHOPORIGIN ,SHOPID,API_HOST,ASSETS_HOST} from '../common/constants';
 require('isomorphic-fetch');
-
+import moment from 'moment';
 
 
  const manage_bundles = () => {
@@ -209,9 +209,10 @@ const [selectedItems, setSelectedItems] = useState([]);
  );
 
 function renderItem(item) {
-    const {PROGRAM_ID, URL, PROGRAM_NAME, GROUP_LIST, latestOrderUrl,PROGRAM_DESCRIPTION,REVISION_NUMBER,STATUS} = item;
-    const media = <Thumbnail source={ASSETS_HOST+"/b"+PROGRAM_ID}/>;
-    const shortcutActions = [{content: 'View latest order', url: latestOrderUrl},{content: 'Recommendations', url: "/BundleRecommend?id="+PROGRAM_ID+"&rev="+REVISION_NUMBER}];
+    const {PROGRAM_ID, URL, PROGRAM_NAME, GROUP_LIST, latestOrderUrl,PROGRAM_DESCRIPTION,REVISION_NUMBER,STATUS,PROGRAM_START_DATE,PROGRAM_END_DATE} = item;
+    const media = <Thumbnail 
+    source={ASSETS_HOST+"/b"+PROGRAM_ID}/>;
+    const shortcutActions = [{content: 'Recommendations', url: "/BundleRecommend?id="+PROGRAM_ID+"&rev="+REVISION_NUMBER}];
     return (
       <ResourceItem
         id={PROGRAM_ID}
@@ -227,7 +228,10 @@ function renderItem(item) {
         <div>{PROGRAM_DESCRIPTION}</div>
         <Stack distribution="equalSpacing">
         <div>{'Revision: '+REVISION_NUMBER}</div>
+        
         <Badge>{STATUS}</Badge>
+        <Badge> {moment(PROGRAM_START_DATE).isBefore() && moment(PROGRAM_END_DATE).isAfter() ? 'Active':'Inactive'}</Badge>:
+        <Button outline onClick={() => window.open('https://'+SHOPORIGIN+'/admin/draft_orders?query=bundle'+PROGRAM_ID)}>View latest order</Button>
         </Stack>
         
         
