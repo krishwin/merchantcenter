@@ -141,25 +141,36 @@ const [selectedItems, setSelectedItems] = useState([]);
     
     console.log(pagenum);
     let startIndex;
-    if(pagenum -1  == '1' )
+    if(pagenum  == '1' )
     startIndex=  0;
-    else
-    startIndex = (pagenum -1 )*5;
+    else if (isLastPage)
+    {
+      startIndex = (pagenum -2 )*5;
+      setPagenum(pagenum-2);
+    }
+  
+    else 
+    {
+      startIndex = (pagenum -1 )*5;
+    setPagenum(pagenum-1);
+    }
+    
+
     setDisplayedItems(bundles.slice(startIndex,startIndex+5));
     if(startIndex== 0)
     {
       setisFirstPage(true);
     }
     setisLastPage(false);
+    
 
-    setPagenum(pagenum-1);
   }
 
   function handleNextPage() {
     
     let startIndex = pagenum*5;
     setDisplayedItems(bundles.slice(startIndex,startIndex+5));
-    if(!bundles[startIndex+6])
+    if(!bundles[startIndex+5])
     {
       setisLastPage(true);
     }

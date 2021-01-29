@@ -182,7 +182,7 @@ const Bundlewizard = ({data,programId}) => {
               request.STATUS = 'DRAFT';
               setLoading(true);
       const resp =  await fetch(
-        API_HOST+'bundles_dev/save',
+        API_HOST+'/save',
                               {
                                 method: 'POST',
                                 body : JSON.stringify(request),
