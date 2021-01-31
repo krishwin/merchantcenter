@@ -4,7 +4,7 @@ import {PlusMinor} from '@shopify/polaris-icons';
 import { useRouter } from 'next/router';
 import {Thumbnail, Button, Card, Filters, 
   ResourceItem, ResourceList, TextField, TextStyle,Spinner,Stack,Badge,Frame,FormLayout,Pagination} from '@shopify/polaris';
-import {AUTHTOKEN,SHOPORIGIN ,SHOPID,API_HOST} from '../common/constants';
+import {AUTHTOKEN,SHOPORIGIN ,SHOPID,API_HOST,ASSETS_HOST} from '../common/constants';
 import {RecommendationsList} from '../components/Recos';
 import {AddRecommendation} from '../components/Recos';
 require('isomorphic-fetch');
@@ -17,7 +17,7 @@ const client = new ApolloClient({
   request: operation => {
     operation.setContext({
       headers: {
-        'X-Shopify-Storefront-Access-Token':'6b21d0466c4f2a73d7d21bf5557c755f'
+        'X-Shopify-Storefront-Access-Token': sessionStorage.getItem('shopconfig')
       },
     });
   },

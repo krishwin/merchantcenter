@@ -68,8 +68,29 @@ const [selectedItems, setSelectedItems] = useState([]);
 
     }
 	    fetchData();
-	  },[]);
+    },[]);
+    
+    useEffect(() => {
+              let config ={};
+          const fetchconfig = async () =>{
+            const response =
+            await fetch(
+              ASSETS_HOST+'/'+SHOPORIGIN.split('.')[0]+'.config.json',
+              {
+                method: 'GET',
 
+              },
+
+            );
+
+          config = await response.json();
+          sessionStorage.setItem('shopconfig', config.token);
+
+          return config;
+          }
+           fetchconfig();
+
+        },[]);
 
 
   const promotedBulkActions = [
