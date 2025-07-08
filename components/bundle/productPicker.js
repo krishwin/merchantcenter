@@ -26,18 +26,31 @@ const ProductPicker = ({formData,setForm,id,type}) =>{
     const {PRODUCTS} = formData;
     const [product, setProduct] = useState(PRODUCTS && PRODUCTS[id] ? PRODUCTS[id].PRODUCT_ID : '');
     const [producttitle, setProducttitle] = useState(PRODUCTS && PRODUCTS[id] ? PRODUCTS[id].PRODUCT_DESC: '' );
+    const [productalttitle, setProductalttitle] = useState(PRODUCTS && PRODUCTS[id] ? PRODUCTS[id].PRODUCT_DESC_ALT: '' );
     const [pgmlineid, setPgmlineid] = useState(PRODUCTS && PRODUCTS[id] ? PRODUCTS[id].PROGRAM_LINE_ID: '' );
     const [multiple, setMultiple] = useState(false);
     const [active, setActive] = useState(false);
     const handleResourcePickerClose = useCallback(() => setActive(false), []);
 
-  
+    const handlealttitle = useCallback((newValue) => {
+      setProductalttitle(newValue);
+      const products = {
+        PRODUCT_ID:product,
+            PRODUCT_DESC:producttitle,
+            TYPE:'Collection',
+            PROGRAM_LEVEL:id,
+            PROGRAM_LINE_ID:pgmlineid,
+            PRODUCT_DESC_ALT: newValue
+        }
+        setForm(products,'PRODUCTS',id);
+    },[product,producttitle]);
 
   const handleSelection = useCallback(
     ({selection}) => {
       
       const idsFromResources = selection.map((product) => product.id);
       const titleFromResources = selection.map((product) => product.title);
+
       console.log('Selected products: ', idsFromResources);
       setProduct(idsFromResources[0]);
       setProducttitle(titleFromResources[0]);
@@ -71,6 +84,13 @@ return(
             connectedRight={
                 <Button onClick={() => setActive(true)}>browse</Button>
                 }
+            />
+
+          <TextField
+                value={productalttitle}
+            onChange={handlealttitle}
+            helpText={"Enter Display Title"}
+            
             />
            </div>
           

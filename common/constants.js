@@ -31,14 +31,33 @@ const shopid = env => {
     return shopid;
 };
 
+const adb_host = env =>{
+    let adb_host = "https://irad6avdaqvzwto-subscriberdb.adb.us-phoenix-1.oraclecloudapps.com/ords/admin/restsub";
+    return adb_host;
+};
 
+const api_host = env =>{
+    let api_host = "https://api.subscribenow.app/bundles_dev";
+    return api_host;
+};
+
+const assets_host = env =>{
+    let assets_host = "https://subscribenow.app/images";
+    return assets_host;
+};
 export const constants = Object.freeze({
     AUTHTOKEN : authtoken(" "),
     SHOPORIGIN : shopOrigin(" "),
-    SHOPID      : shopid(" ")
+    SHOPID      : shopid(" "),
+    ADB_HOST    : adb_host(" "),
+    API_HOST    : api_host(" "),
+    ASSETS_HOST  : assets_host(" ")
 });
 
 export const {AUTHTOKEN} =constants;
 export const {SHOPORIGIN} =constants;
 export const {SHOPID} = constants;
+export const {ADB_HOST} = constants;
+export const {API_HOST} = constants;
+export const {ASSETS_HOST} = constants;
 export default constants;

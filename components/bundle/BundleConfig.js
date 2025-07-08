@@ -69,6 +69,7 @@ const BundleConfig = ({ formData, setForm,navigation }) => {
                     active={popoverActive}
                     activator={activator}
                     onClose={togglePopoverActive}
+                    preferredPosition="below"
                 >
                     <DatePicker
                 month={month}

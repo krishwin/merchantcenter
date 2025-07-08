@@ -1,6 +1,6 @@
 import React, {useCallback, useState,useEffect} from 'react';
 import {ProgressBar,Toast,Banner} from '@shopify/polaris';
-import {AUTHTOKEN,SHOPORIGIN ,SHOPID} from '../../common/constants';
+import {AUTHTOKEN,SHOPORIGIN ,SHOPID,API_HOST} from '../../common/constants';
 const PublishForm = ({ formData, setForm,navigation }) =>  {
     const [loading, setLoading] = useState( true);
     const [active, setActive] = useState(false);
@@ -20,8 +20,8 @@ const PublishForm = ({ formData, setForm,navigation }) =>  {
         const publish = async () => {
             request.STATUS = 'PUBLISHED';
             
-            const discresp =  await fetch(
-                'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundle/discount',
+            /*const discresp =  await fetch(
+              API_HOST+'/discount',
             {
               method: 'POST',
               body : JSON.stringify(request),
@@ -32,19 +32,19 @@ const PublishForm = ({ formData, setForm,navigation }) =>  {
               },
             },
     
-          );
-          const discount = await discresp.json();
+          );*/
+          //const discount = await discresp.json();
 
-          if(discount.discount_code && discount.discount_code.id)
-          {
-              request.PRICE_RULE_ID = discount.discount_code.price_rule_id;
-              request.DISCOUNT_ID = discount.discount_code.id;
-              request.DISCOUNT_CODE =discount.discount_code.code;
-              setForm(discount.discount_code.price_rule_id,'PRICE_RULE_ID');
-              setForm(discount.discount_code.id,'DISCOUNT_ID');
-              setForm(discount.discount_code.code,'DISCOUNT_CODE');
+          //if(discount.discount_code && discount.discount_code.id)
+          //{
+              request.PRICE_RULE_ID = -1;//discount.discount_code.price_rule_id;
+              request.DISCOUNT_ID = -1//discount.discount_code.id;
+              request.DISCOUNT_CODE = '';//discount.discount_code.code;
+              //setForm(discount.discount_code.price_rule_id,'PRICE_RULE_ID');
+              //setForm(discount.discount_code.id,'DISCOUNT_ID');
+              //setForm(discount.discount_code.code,'DISCOUNT_CODE');
               const resp =  await fetch(
-                'https://exntjiylhp46knqgk7nchwtyve.apigateway.us-phoenix-1.oci.customer-oci.com/bundle/save',
+                API_HOST+'/save',
             {
               method: 'POST',
               body : JSON.stringify(request),
@@ -68,14 +68,14 @@ const PublishForm = ({ formData, setForm,navigation }) =>  {
                 setMessage('Publish failed. Please try again later.');
                 setStatus("critical");
             }
-          }
+          /*}
           else
           {
             setLoading(false);
             toggleActive();
             setMessage('Publish failed. Please try again later.');
             setStatus("critical");
-          }
+          }*/
         
         }
     publish();
